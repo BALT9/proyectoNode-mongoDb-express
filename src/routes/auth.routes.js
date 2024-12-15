@@ -6,11 +6,16 @@ import {home} from '../controllers/home.controller.js'
 
 // importa una funcion de validateToken.js para acceder a profile 
 import {authRequired} from '../middlewares/validateToken.js';
+// validacion de datos
+import { validateSchema } from '../middlewares/validate.middleware.js';
+// esquemas a validar
+import { registerSchema, loginSchema } from '../schemas/auth.schema.js';
 
 const router = Router();
 
-router.post('/register',register)
-router.post('/login',login)
+// ruta en el navegador, validacion, controladores
+router.post('/register', validateSchema(registerSchema),register)
+router.post('/login',validateSchema(loginSchema),login)
 router.post('/logout',loguot)
 
 
