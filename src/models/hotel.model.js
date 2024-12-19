@@ -4,11 +4,11 @@ const taskSchema = new mongoose.Schema(
     {
         nombreHotel: {
             type: String,
-            required: true,
+            required: true, 
         },
         descripcion: {
             type: String,
-            required: true,
+            required: false,
         },
         date: {
             type: Date,

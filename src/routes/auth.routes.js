@@ -1,7 +1,7 @@
 import {Router} from 'express';
 
 // importa las 2 funciones de AuthenticatorAssertionResponse.controller.js
-import { login,register,loguot, profile } from '../controllers/auth.controller.js';
+import { login,register,loguot, profile, verifyToken} from '../controllers/auth.controller.js';
 import {home} from '../controllers/home.controller.js'
 
 // importa una funcion de validateToken.js para acceder a profile 
@@ -18,6 +18,8 @@ router.post('/register', validateSchema(registerSchema),register)
 router.post('/login',validateSchema(loginSchema),login)
 router.post('/logout',loguot)
 
+
+router.get('/verify', verifyToken)
 
 router.get('/profile',authRequired,profile) // primero ejecuta la funcion authRequired
 

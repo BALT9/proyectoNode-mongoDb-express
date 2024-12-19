@@ -11,13 +11,13 @@ export const registerSchema = z.object({
     email: z.string({
         required_error: 'email requerido',
     }).email({
-        required_error: 'email invalido',
+        message: 'email invalido',
     }),
 
     password: z.string({
         required_error: 'contraseña requerido',
-    }).min(8, {
-        required_error: 'contraseña muy corta',
+    }).min(8,{
+        message: 'La contraseña debe tener al menos 8 caracteres',  // Y lo mismo aquí para la contraseña
     })
 })
 
@@ -26,12 +26,12 @@ export const loginSchema = z.object({
     email: z.string({
         required_error: 'email requerido',
     }).email({
-        required_error: 'email invalido',
+        message: 'email no valido',
     }),
 
     password: z.string({
         required_error: 'contraseña requerido',
     }).min(8, {
-        required_error: 'contraseña muy corta',
+        message: 'contraseña invalida',
     })
 })

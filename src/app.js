@@ -7,12 +7,17 @@ import taskRoutes from './routes/taks.routes.js';
 
 // para extraer los cookies
 import cookieParser from 'cookie-parser';
-
-
+// para conectar puertos
+import cors from 'cors'
 
 const app = express();
 
 app.use(express.json())
+// permite y autoriza coneccion entre puertos
+app.use(cors({
+    origin: 'http://localhost:5173', 
+    credentials: true
+}));
 
 // usa los cookies
 app.use(cookieParser())

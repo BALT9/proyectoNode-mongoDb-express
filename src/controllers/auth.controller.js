@@ -4,6 +4,10 @@ import User from '../models/user.model.js'
 import bcrypt from 'bcrypt'
 // para los tokkens
 import { createAccessToken } from '../libs/jwt.js';
+// importa la libreria de tokens
+import jwt from 'jsonwebtoken'
+
+import { TOKEN_SECRET } from '../config.js';
 
 
 // exporta 2 controladores
@@ -13,6 +17,11 @@ export const register = async (req,res)=>{
     // console.log(req.body)
     
     try {
+        // antes de crear busca al usuario repetido
+        const userFound = await User.findOne({email}) 
+        if(userFound) 
+            return res.status(400).json(['este email ya esta en uso']);
+
         // encriptar la contraseña
         const passwordHashs = await bcrypt.hash(password,10)
 
@@ -70,7 +79,7 @@ export const login = async (req,res)=>{
 
         // res.json({token})
         // guarda el token en el cookie
-        res.cookie('token', token)
+        res.cookie('token', token);
 
         // respuesta al frontend
         res.json({
@@ -91,6 +100,7 @@ export const loguot = (req,res)=>{
     return res.sendStatus(200);
 }
 
+
 export const profile = async(req,res)=>{
     // busca al usuario por la id
     const userFound = await User.findById(req.user.id)
@@ -100,5 +110,24 @@ export const profile = async(req,res)=>{
         id: userFound._id,
         username: userFound.username,
         email: userFound.email,
+    })
+}
+
+// verifica el token
+export const verifyToken = async(req,res)=>{
+    const {token} = req.cookies
+    if(!token) return res.status(401).json({message: 'No Autorizado'})
+
+        jwt.verify(token, TOKEN_SECRET, async(err, user) =>{
+        if(err) return res.status(401).json({message: 'No Autorizado'});
+        
+        const userFound = await User.findById(user.id) 
+        if(!userFound) return res.status(401).json({message: 'No Autorizado'})
+
+        return res.json({
+            id: userFound._id,
+            username: userFound.username,
+            email: userFound.email,
+        })
     })
 }
